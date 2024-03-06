@@ -75,8 +75,9 @@ export default class Board {
             ticketList.appendChild(task);
             task.dataset.id = item.id;
             name.textContent = item.name;
-            if (item.status === true) {
-                status.checked = 'checked';
+            if (item.status === "true" ||
+                item.status === true) {
+                status.checked = true;
             };
             dateTime.textContent = item.created;
             this.tasks.push(task);
@@ -87,6 +88,7 @@ export default class Board {
     registerTaskEvents(task) {
         const editBtn = task.querySelector('.ticket-button-edit');
         const deleteBtn = task.querySelector('.ticket-button-delete');
+        const checkBoxBtn = task.querySelector('.ticket-status');
         task.addEventListener('click', (e) => {
             const checkbox = task.querySelector('.label-for-checkbox');
             const trueCheckBox = task.querySelector('.ticket-status');
@@ -99,7 +101,46 @@ export default class Board {
             this.showDescription(task);
         });
 
-         editBtn.addEventListener('click', async () => {
+        checkBoxBtn.addEventListener('click', async () => {
+            this.currentTicket = task;
+            let options = {};
+            if (checkBoxBtn.checked) {
+                options = {
+                    data: {
+                        method: 'updateById',
+                        id: this.currentTicket.dataset.id,
+                        status: true
+                    },
+                    responseType: 'json',
+                    method: 'POST',
+                }
+            } else {
+                options = {
+                    data: {
+                        method: 'updateById',
+                        id: this.currentTicket.dataset.id,
+                        status: false
+                    },
+                    responseType: 'json',
+                    method: 'POST',
+                }
+            }
+            await CreateRequest(options);
+            this.tasks = [];
+            this.currentTicket = null;
+            this.removeTasks();
+            const tasks =  await CreateRequest({
+                data: {
+                    method: 'allTickets',
+                },
+                responseType: 'json',
+                method: 'GET',
+            });
+            console.log(tasks);
+            this.buildTasks(tasks);
+        })
+
+        editBtn.addEventListener('click', async () => {
             this.currentTicket = task;
             this.popovers.buildEditPopover(task);
             const inputShort = document.querySelector('.input-short-description');

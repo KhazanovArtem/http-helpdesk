@@ -4,7 +4,7 @@ export function CreateRequest(options ={}) {
           headers, data, responseType, method,
         } = options;
 
-    const url = 'https://khazanovartem.github.io/http-backend/';
+    const url = 'https://http-backend-viyc.onrender.com';
 
     const params = new URLSearchParams();
 
