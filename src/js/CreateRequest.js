@@ -1,4 +1,4 @@
-export function CreateRequest(options ={}) {
+export function CreateRequest(options = {}) {
     return new Promise((resolve, reject) => {
         const {
           headers, data, responseType, method,

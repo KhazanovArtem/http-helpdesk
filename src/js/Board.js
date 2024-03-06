@@ -78,7 +78,7 @@ export default class Board {
             if (item.status === "true" ||
                 item.status === true) {
                 status.checked = true;
-            };
+            }
             dateTime.textContent = item.created;
             this.tasks.push(task);
             this.registerTaskEvents(task);
